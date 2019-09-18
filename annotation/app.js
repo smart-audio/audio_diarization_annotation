@@ -6,7 +6,7 @@ var wavesurfer;
 /**
  * Init & load.
  */
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Init wavesurfer
     wavesurfer = WaveSurfer.create({
         container: '#waveform',
@@ -14,37 +14,50 @@ document.addEventListener('DOMContentLoaded', function() {
         pixelRatio: 1,
         scrollParent: true,
         normalize: true,
-        minimap: true,
-        backend: 'MediaElement',
+        backend: 'WebAudio',
         plugins: [
             WaveSurfer.regions.create(),
-            WaveSurfer.minimap.create({
-                height: 30,
-                waveColor: '#ddd',
-                progressColor: '#999',
-                cursorColor: '#999'
-            }),
             WaveSurfer.timeline.create({
                 container: '#wave-timeline'
+            }),
+            WaveSurfer.minimap.create({
+                container: '#wave-minimap',
+                waveColor: '#777',
+                progressColor: '#222',
+                height: 50
+            }),
+            WaveSurfer.cursor.create({
+                showTime: true,
+                opacity: 1,
+                customShowTimeStyle: {
+                    'background-color': '#000',
+                    color: '#fff',
+                    padding: '2px',
+                    'font-size': '10px'
+                }
             })
+
         ]
     });
 
-    wavesurfer.util
-        .fetchFile({
-            responseType: 'json',
-            url: 'rashomon.json'
-        })
-        .on('success', function(data) {
-            wavesurfer.load(
-                'http://www.archive.org/download/mshortworks_001_1202_librivox/msw001_03_rashomon_akutagawa_mt_64kb.mp3',
-                data
-            );
-        });
+    wavesurfer.load('../media/msw001_03_rashomon_akutagawa_mt_64kb.mp3');
+
+    // load peak of backend generated
+    // wavesurfer.util
+    //     .fetchFile({
+    //         responseType: 'json',
+    //         url: 'rashomon.json'
+    //     })
+    //     .on('success', function (data) {
+    //         wavesurfer.load(
+    //             '../media/msw001_03_rashomon_akutagawa_mt_64kb.mp3',
+    //             data
+    //         );
+    //     });
 
     /* Regions */
 
-    wavesurfer.on('ready', function() {
+    wavesurfer.on('ready', function () {
         wavesurfer.enableDragSelection({
             color: randomColor(0.1)
         });
@@ -52,24 +65,18 @@ document.addEventListener('DOMContentLoaded', function() {
         if (localStorage.regions) {
             loadRegions(JSON.parse(localStorage.regions));
         } else {
-            // loadRegions(
-            //     extractRegions(
-            //         wavesurfer.backend.getPeaks(512),
-            //         wavesurfer.getDuration()
-            //     )
-            // );
             wavesurfer.util
                 .ajax({
                     responseType: 'json',
                     url: 'annotations.json'
                 })
-                .on('success', function(data) {
+                .on('success', function (data) {
                     loadRegions(data);
                     saveRegions();
                 });
         }
     });
-    wavesurfer.on('region-click', function(region, e) {
+    wavesurfer.on('region-click', function (region, e) {
         e.stopPropagation();
         // Play on click, loop on shift click
         e.shiftKey ? region.playLoop() : region.play();
@@ -79,8 +86,8 @@ document.addEventListener('DOMContentLoaded', function() {
     wavesurfer.on('region-removed', saveRegions);
     wavesurfer.on('region-in', showNote);
 
-    wavesurfer.on('region-play', function(region) {
-        region.once('out', function() {
+    wavesurfer.on('region-play', function (region) {
+        region.once('out', function () {
             wavesurfer.play(region.start);
             wavesurfer.pause();
         });
@@ -89,11 +96,11 @@ document.addEventListener('DOMContentLoaded', function() {
     /* Toggle play/pause buttons. */
     var playButton = document.querySelector('#play');
     var pauseButton = document.querySelector('#pause');
-    wavesurfer.on('play', function() {
+    wavesurfer.on('play', function () {
         playButton.style.display = 'none';
         pauseButton.style.display = '';
     });
-    wavesurfer.on('pause', function() {
+    wavesurfer.on('pause', function () {
         playButton.style.display = '';
         pauseButton.style.display = 'none';
     });
@@ -104,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function() {
  */
 function saveRegions() {
     localStorage.regions = JSON.stringify(
-        Object.keys(wavesurfer.regions.list).map(function(id) {
+        Object.keys(wavesurfer.regions.list).map(function (id) {
             var region = wavesurfer.regions.list[id];
             return {
                 start: region.start,
@@ -120,7 +127,7 @@ function saveRegions() {
  * Load regions from localStorage.
  */
 function loadRegions(regions) {
-    regions.forEach(function(region) {
+    regions.forEach(function (region) {
         region.color = randomColor(0.1);
         wavesurfer.addRegion(region);
     });
@@ -140,7 +147,7 @@ function extractRegions(peaks, duration) {
 
     // Gather silence indeces
     var silences = [];
-    Array.prototype.forEach.call(peaks, function(val, index) {
+    Array.prototype.forEach.call(peaks, function (val, index) {
         if (Math.abs(val) <= minValue) {
             silences.push(index);
         }
@@ -148,7 +155,7 @@ function extractRegions(peaks, duration) {
 
     // Cluster silence values
     var clusters = [];
-    silences.forEach(function(val, index) {
+    silences.forEach(function (val, index) {
         if (clusters.length && val == silences[index - 1] + 1) {
             clusters[clusters.length - 1].push(val);
         } else {
@@ -157,12 +164,12 @@ function extractRegions(peaks, duration) {
     });
 
     // Filter silence clusters by minimum length
-    var fClusters = clusters.filter(function(cluster) {
+    var fClusters = clusters.filter(function (cluster) {
         return cluster.length >= minLen;
     });
 
     // Create regions on the edges of silences
-    var regions = fClusters.map(function(cluster, index) {
+    var regions = fClusters.map(function (cluster, index) {
         var next = fClusters[index + 1];
         return {
             start: cluster[cluster.length - 1],
@@ -180,12 +187,12 @@ function extractRegions(peaks, duration) {
     }
 
     // Filter regions by minimum length
-    var fRegions = regions.filter(function(reg) {
+    var fRegions = regions.filter(function (reg) {
         return reg.end - reg.start >= minLen;
     });
 
     // Return time-based regions
-    return fRegions.map(function(reg) {
+    return fRegions.map(function (reg) {
         return {
             start: Math.round(reg.start * coef * 10) / 10,
             end: Math.round(reg.end * coef * 10) / 10
@@ -218,7 +225,7 @@ function editAnnotation(region) {
     (form.elements.start.value = Math.round(region.start * 10) / 10),
         (form.elements.end.value = Math.round(region.end * 10) / 10);
     form.elements.note.value = region.data.note || '';
-    form.onsubmit = function(e) {
+    form.onsubmit = function (e) {
         e.preventDefault();
         region.update({
             start: form.elements.start.value,
@@ -229,7 +236,7 @@ function editAnnotation(region) {
         });
         form.style.opacity = 0;
     };
-    form.onreset = function() {
+    form.onreset = function () {
         form.style.opacity = 0;
         form.dataset.region = null;
     };
@@ -249,7 +256,7 @@ function showNote(region) {
 /**
  * Bind controls.
  */
-window.GLOBAL_ACTIONS['delete-region'] = function() {
+window.GLOBAL_ACTIONS['delete-region'] = function () {
     var form = document.forms.edit;
     var regionId = form.dataset.region;
     if (regionId) {
@@ -258,9 +265,9 @@ window.GLOBAL_ACTIONS['delete-region'] = function() {
     }
 };
 
-window.GLOBAL_ACTIONS['export'] = function() {
+window.GLOBAL_ACTIONS['export'] = function () {
     window.open(
         'data:application/json;charset=utf-8,' +
-            encodeURIComponent(localStorage.regions)
+        encodeURIComponent(localStorage.regions)
     );
 };
