@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     wavesurfer.on('ready', function () {
         wavesurfer.enableDragSelection({
-            color: randomColor(0.1)
+            color: randomColor(0.6)
         });
 
     wavesurfer.util
@@ -135,7 +135,7 @@ function saveRegions() {
  */
 function loadRegions(regions) {
     regions.forEach(function (region) {
-        region.color = randomColor(0.1);
+        region.color = randomColor(0.6);
         region.drag = false;
         wavesurfer.addRegion(region);
     });
@@ -218,7 +218,7 @@ function randomColor(alpha) {
             ~~(Math.random() * 255),
             ~~(Math.random() * 255),
             ~~(Math.random() * 255),
-            alpha || 1
+            alpha || 0.5
         ] +
         ')'
     );
