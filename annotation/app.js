@@ -77,9 +77,11 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
     wavesurfer.on('region-click', function (region, e) {
-        e.stopPropagation();
-        // Play on click, loop on shift click
-        e.shiftKey ? region.playLoop() : region.play();
+        if (e.shiftKey) {
+            e.stopPropagation();
+            wavesurfer.skip(region.start - wavesurfer.getCurrentTime());
+            region.play();
+        }
     });
     wavesurfer.on('region-click', editAnnotation);
     wavesurfer.on('region-updated', saveRegions);
@@ -88,7 +90,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     wavesurfer.on('region-play', function (region) {
         region.once('out', function () {
-            wavesurfer.play(region.start);
+            // wavesurfer.play(region.start);
             wavesurfer.pause();
         });
     });
@@ -104,6 +106,14 @@ document.addEventListener('DOMContentLoaded', function () {
         playButton.style.display = '';
         pauseButton.style.display = 'none';
     });
+
+    wavesurfer.regions.nextRegion = function () {
+        console.log(this.getCurrentRegion().start);
+    };
+
+    wavesurfer.regions.priorRegion = function () {
+
+    };
 });
 
 /**
@@ -270,9 +280,9 @@ window.GLOBAL_ACTIONS['delete-region'] = function () {
  * Display a base64 URL inside an iframe in another window to bypass Chrome security update of "prevent opening base64 URIs in the browser directly with JavaScript"
  * # Ref https://ourcodeworld.com/articles/read/682/what-does-the-not-allowed-to-navigate-top-frame-to-data-url-javascript-exception-means-in-google-chrome
  */
-function debugBase64(base64URL){
+function debugBase64(base64URL) {
     var win = window.open();
-    win.document.write('<iframe src="' + base64URL  + '" frameborder="0" style="border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%;" allowfullscreen></iframe>');
+    win.document.write('<iframe src="' + base64URL + '" frameborder="0" style="border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%;" allowfullscreen></iframe>');
 }
 
 window.GLOBAL_ACTIONS['export'] = function () {
