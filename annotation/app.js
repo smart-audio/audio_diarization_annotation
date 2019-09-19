@@ -58,9 +58,9 @@ document.addEventListener('DOMContentLoaded', function () {
     /* Regions */
 
     wavesurfer.on('ready', function () {
-        wavesurfer.enableDragSelection({
-            color: randomColor(0.6)
-        });
+        // wavesurfer.enableDragSelection({
+        //     color: randomColor(0.6)
+        // });
 
         wavesurfer.util
             .ajax({
