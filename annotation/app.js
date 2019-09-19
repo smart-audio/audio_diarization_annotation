@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         let r = sortedRegions[i];
                         if (r.end < end) {
                             priorRegion = r;
-                        } else{
+                        } else {
                             break;
                         }
                     }
@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         "end": end,
                         "data": {}
                     };
-                    region.color = randomColor(0.6);
+                    region.color = selectColor('');
                     region.drag = false;
                     wavesurfer.addRegion(region);
                     saveRegions();
@@ -182,7 +182,7 @@ function saveRegions() {
  */
 function loadRegions(regions) {
     regions.forEach(function (region) {
-        region.color = randomColor(0.6);
+        region.color = selectColor(region.data.who);
         region.drag = false;
         wavesurfer.addRegion(region);
     });
@@ -287,6 +287,33 @@ function randomColor(alpha) {
     );
 }
 
+function selectColor(who) {
+    let whos = ['teacher', 'student', 'other'];
+    let idx = -1;
+    for (let i in whos) {
+        if (who == whos[i]) {
+            idx = i;
+        }
+    }
+    if (idx == -1) {
+        idx = whos.length;
+    }
+
+    alpha = 0.5
+    colors = [[229, 43, 80, alpha], [255, 191, 0, alpha], [153, 102, 204, alpha], [0, 127, 255, alpha]];
+
+    return (
+        'rgba(' +
+        colors[idx] +
+        ')'
+    );
+}
+
+function selectElement(id, valueToSelect) {
+    let element = document.getElementById(id);
+    element.value = valueToSelect;
+}
+
 /**
  * Edit annotation for a region.
  */
@@ -295,15 +322,17 @@ function editAnnotation(region) {
     form.style.opacity = 1;
     (form.elements.start.value = Math.round(region.start * 10) / 10),
         (form.elements.end.value = Math.round(region.end * 10) / 10);
-    form.elements.note.value = region.data.note || '';
+    // form.elements.note.value = region.data.note || '';
+    selectElement('who', region.data.who || '');
     form.onsubmit = function (e) {
         e.preventDefault();
         region.update({
             start: form.elements.start.value,
             end: form.elements.end.value,
             data: {
-                note: form.elements.note.value
-            }
+                who: form.elements.who.value
+            },
+            color: selectColor(form.elements.who.value),  // for update render.
         });
         form.style.opacity = 0;
     };
@@ -321,7 +350,7 @@ function showNote(region) {
     if (!showNote.el) {
         showNote.el = document.querySelector('#subtitle');
     }
-    showNote.el.textContent = region.data.note || '–';
+    showNote.el.textContent = region.data.who || '–';
 }
 
 /**

@@ -3,23 +3,25 @@
         "start": 1.1,
         "end": 1.8,
         "data": {},
-        "attributes": { "label": "abc", "highlight": true }
+        "attributes": { "label": "abc"}
     },
-    { "start": "17.8", "end": "18.6", "data": { "note": "羅生門" } },
-    { "start": "19.19", "end": "20.5", "data": { "note": "芥川龍之介" } },
+    { "start": "17.8", "end": "18.6", "data": {"who": "teacher"} },
+    { "start": "19.19", "end": "20.5", "data": { "who": "student" } },
     {
         "start": "22.5",
         "end": "24.5",
-        "data": { "note": "ある日の暮方の事である。" }
+        "data": { "who": "other"}
     },
     {
         "start": "25.19",
         "end": "26.3",
-        "data": { "note": "一人の下人げにんが、" }
+        "data": { }
     },
     {
         "start": "26.8",
         "end": "28",
-        "data": { "note": "羅生門らしょうもんの下で" }
+        "data": {
+            "note": "hello"
+        }
     }
 ]
