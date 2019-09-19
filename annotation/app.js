@@ -62,15 +62,15 @@ document.addEventListener('DOMContentLoaded', function () {
             color: randomColor(0.6)
         });
 
-    wavesurfer.util
-        .ajax({
-            responseType: 'json',
-            url: 'annotations.json'
-        })
-        .on('success', function (data) {
-            loadRegions(data);
-            saveRegions();
-        });
+        wavesurfer.util
+            .ajax({
+                responseType: 'json',
+                url: 'annotations.json'
+            })
+            .on('success', function (data) {
+                loadRegions(data);
+                saveRegions();
+            });
 
     });
     wavesurfer.on('region-click', function (region, e) {
@@ -102,12 +102,34 @@ document.addEventListener('DOMContentLoaded', function () {
         setTimeout(function () {
             if (curcorNotInRegion()) {
                 if (e.shiftKey) {
-                    region = {
-                        "start": wavesurfer.getCurrentTime() - 2,
-                        "end": wavesurfer.getCurrentTime(),
-                        "data": {}
+                    // get the nearest prior region
+                    let sortedRegions = sortRegions(wavesurfer.regions.list);
+                    let end = wavesurfer.getCurrentTime();
+                    let priorRegion = null;
+                    let start;
+                    let r;
+                    for (let i in sortedRegions) {
+                        let r = sortedRegions[i];
+                        if (r.end < end) {
+                            priorRegion = r;
+                        } else{
+                            break;
+                        }
                     }
+                    if (priorRegion) {
+                        start = priorRegion.end;
+                    } else {
+                        start = 0;
+                    }
+                    let region = {
+                        "start": start,
+                        "end": end,
+                        "data": {}
+                    };
+                    region.color = randomColor(0.6);
+                    region.drag = false;
                     wavesurfer.addRegion(region);
+                    saveRegions();
                 }
             }
         }, 0);
@@ -166,13 +188,19 @@ function loadRegions(regions) {
     });
 }
 
-function sortedRegions(fRegions) {
+function sortRegions(fRegions) {
     // Return time-based regions
-    return fRegions.map(function (reg) {
+    let regions = Object.keys(wavesurfer.regions.list).map(function (id) {
+        var region = wavesurfer.regions.list[id];
         return {
-            start: Math.round(reg.start * coef * 10) / 10,
-            end: Math.round(reg.end * coef * 10) / 10
+            start: region.start,
+            end: region.end,
+            attributes: region.attributes,
+            data: region.data
         };
+    });
+    return regions.sort(function (a, b) {
+        return (a.start - b.start);
     });
 }
 
