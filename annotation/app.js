@@ -92,6 +92,27 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    wavesurfer.drawer.on('click', function (e, progress) {
+        // need to use setTimeout, because wavesurfer listen this event with setTimeout as follow:
+        // Click-to-seek
+        // this.drawer.on('click', (e, progress) => {
+        //     setTimeout(() => this.seekTo(progress), 0);
+        // });
+
+        setTimeout(function () {
+            if (curcorNotInRegion()) {
+                if (e.shiftKey) {
+                    region = {
+                        "start": wavesurfer.getCurrentTime() - 2,
+                        "end": wavesurfer.getCurrentTime(),
+                        "data": {}
+                    }
+                    wavesurfer.addRegion(region);
+                }
+            }
+        }, 0);
+    });
+
     /* Toggle play/pause buttons. */
     var playButton = document.querySelector('#play');
     var pauseButton = document.querySelector('#pause');
@@ -112,6 +133,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     };
 });
+
+function curcorNotInRegion() {
+    return true;
+}
 
 /**
  * Save annotations to localStorage.
@@ -138,6 +163,16 @@ function loadRegions(regions) {
         region.color = randomColor(0.6);
         region.drag = false;
         wavesurfer.addRegion(region);
+    });
+}
+
+function sortedRegions(fRegions) {
+    // Return time-based regions
+    return fRegions.map(function (reg) {
+        return {
+            start: Math.round(reg.start * coef * 10) / 10,
+            end: Math.round(reg.end * coef * 10) / 10
+        };
     });
 }
 
