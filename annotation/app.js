@@ -129,6 +129,7 @@ function saveRegions() {
 function loadRegions(regions) {
     regions.forEach(function (region) {
         region.color = randomColor(0.1);
+        region.drag = false;
         wavesurfer.addRegion(region);
     });
 }
