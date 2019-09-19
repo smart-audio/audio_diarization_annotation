@@ -62,19 +62,16 @@ document.addEventListener('DOMContentLoaded', function () {
             color: randomColor(0.1)
         });
 
-        if (localStorage.regions) {
-            loadRegions(JSON.parse(localStorage.regions));
-        } else {
-            wavesurfer.util
-                .ajax({
-                    responseType: 'json',
-                    url: 'annotations.json'
-                })
-                .on('success', function (data) {
-                    loadRegions(data);
-                    saveRegions();
-                });
-        }
+    wavesurfer.util
+        .ajax({
+            responseType: 'json',
+            url: 'annotations.json'
+        })
+        .on('success', function (data) {
+            loadRegions(data);
+            saveRegions();
+        });
+
     });
     wavesurfer.on('region-click', function (region, e) {
         if (e.shiftKey) {
