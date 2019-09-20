@@ -8,7 +8,7 @@ var wavesurfer;
  */
 document.addEventListener('DOMContentLoaded', function () {
     // Init wavesurfer
-    wavesurfer = WaveSurfer.create({
+    let options = {
         container: '#waveform',
         height: 100,
         pixelRatio: 1,
@@ -38,7 +38,18 @@ document.addEventListener('DOMContentLoaded', function () {
             })
 
         ]
-    });
+    };
+
+    if (location.search.match('scroll')) {
+        options.minPxPerSec = 100;
+        options.scrollParent = true;
+    }
+
+    if (location.search.match('fill')) {
+        options.normalize = true;
+    }
+
+    wavesurfer = WaveSurfer.create(options);
 
     wavesurfer.load('../media/msw001_03_rashomon_akutagawa_mt_64kb.mp3');
 
