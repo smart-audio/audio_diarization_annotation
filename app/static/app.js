@@ -3,6 +3,8 @@
  */
 var wavesurfer;
 
+audio_name = getUrlVars()["audio"];
+annotation_name = audio_name.split('.')[0] + '.json'
 /**
  * Init & load.
  */
@@ -50,9 +52,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     wavesurfer = WaveSurfer.create(options);
-
-    audio_name = getUrlVars()["audio"];
-    annotation_name = audio_name.split('.')[0] + '.json'
     wavesurfer.load('/audio/' + audio_name);
 
     /* Regions */
@@ -173,6 +172,34 @@ function saveRegions() {
             };
         })
     );
+    saveAnnotationToServer();
+}
+
+/**
+ * upload to server
+ */
+function saveAnnotationToServer() {
+    let data = JSON.stringify(
+        Object.keys(wavesurfer.regions.list).map(function (id) {
+            var region = wavesurfer.regions.list[id];
+            return {
+                start: region.start,
+                end: region.end,
+                attributes: region.attributes,
+                data: region.data
+            };
+        })
+    );
+    fetch("/annotation/" + annotation_name, {
+        method: "POST",
+        body: data
+    }).then(res => {
+        if (!res.ok) throw res;
+        console.log("upload complete", annotation_name, res);
+    }).catch(function (err) {
+        console.log('Fetch Error :-S', err);
+        alert('upload file error: ' + annotation_name)
+    });
 }
 
 /**
@@ -384,7 +411,7 @@ window.GLOBAL_ACTIONS['export'] = function () {
  */
 function getUrlVars() {
     var vars = {};
-    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (m, key, value) {
         vars[key] = value;
     });
     return vars;

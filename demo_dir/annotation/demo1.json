@@ -1,27 +1,50 @@
 [
-    {
-        "start": 1.1,
-        "end": 1.8,
-        "data": {},
-        "attributes": { "label": "abc"}
+  {
+    "start": 1.1,
+    "end": 1.8,
+    "attributes": {
+      "label": "abc"
     },
-    { "start": "17.8", "end": "18.6", "data": {"who": "teacher"} },
-    { "start": "19.19", "end": "20.5", "data": { "who": "student" } },
-    {
-        "start": "22.5",
-        "end": "24.5",
-        "data": { "who": "other"}
-    },
-    {
-        "start": "25.19",
-        "end": "26.3",
-        "data": { }
-    },
-    {
-        "start": "26.8",
-        "end": "28",
-        "data": {
-            "note": "hello"
-        }
+    "data": {}
+  },
+  {
+    "start": 17.8,
+    "end": 18.6,
+    "attributes": {},
+    "data": {
+      "who": "teacher"
     }
+  },
+  {
+    "start": 19.19,
+    "end": 20.5,
+    "attributes": {},
+    "data": {
+      "who": "student"
+    }
+  },
+  {
+    "start": 22.5,
+    "end": 24.5,
+    "attributes": {},
+    "data": {
+      "who": "other"
+    }
+  },
+  {
+    "start": 25.2,
+    "end": 26.3,
+    "attributes": {},
+    "data": {
+      "who": "student"
+    }
+  },
+  {
+    "start": 26.8,
+    "end": 28,
+    "attributes": {},
+    "data": {
+      "note": "hello"
+    }
+  }
 ]

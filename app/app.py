@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import json
 import os
 import sys
 
@@ -12,6 +13,7 @@ def root():
     files = sorted(os.listdir(os.path.join(work_dir, 'audio')))
     return render_template('index.html', files=files)
 
+
 @app.route('/annotate.html')
 def annotate():
     name = request.args.get('audio', '')
@@ -24,10 +26,20 @@ def send_js(path):
     return app.send_static_file(path)
 
 
-@app.route('/annotation/<path:path>')
+@app.route('/annotation/<path:path>', methods=['GET', 'POST'])
 def annotation(path):
-    return send_from_directory(os.path.join(work_dir, 'annotation'), path)
-
+    if request.method == 'GET':
+        return send_from_directory(os.path.join(work_dir, 'annotation'), path)
+    else:
+        data = request.data
+        filename = path
+        output_dir = os.path.join(work_dir, 'annotation')
+        os.makedirs(output_dir, exist_ok=True)
+        with open(os.path.join(output_dir, filename), 'w') as f:
+            data = data.decode('utf-8')
+            data = json.loads(data)
+            json.dump(data, f, indent=2)
+        return 'ok'
 
 @app.route('/audio/<path:path>')
 def audio(path):
