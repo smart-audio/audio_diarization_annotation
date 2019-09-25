@@ -51,7 +51,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     wavesurfer = WaveSurfer.create(options);
 
-    wavesurfer.load('/audio/demo1.mp3');
+    audio_name = getUrlVars()["audio"];
+    annotation_name = audio_name.split('.')[0] + '.json'
+    wavesurfer.load('/audio/' + audio_name);
 
     /* Regions */
     wavesurfer.on('ready', function () {
@@ -62,13 +64,12 @@ document.addEventListener('DOMContentLoaded', function () {
         wavesurfer.util
             .ajax({
                 responseType: 'json',
-                url: 'annotation/demo1.json'
+                url: 'annotation/' + annotation_name
             })
             .on('success', function (data) {
                 loadRegions(data);
                 saveRegions();
             });
-
     });
     wavesurfer.on('region-click', function (region, e) {
         if (e.shiftKey) {
@@ -377,3 +378,14 @@ window.GLOBAL_ACTIONS['export'] = function () {
         encodeURIComponent(localStorage.regions)
     );
 };
+
+/**
+ * 获取url的参数
+ */
+function getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+        vars[key] = value;
+    });
+    return vars;
+}

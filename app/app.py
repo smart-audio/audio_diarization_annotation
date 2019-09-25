@@ -2,14 +2,20 @@
 import os
 import sys
 
-from flask import Flask, send_from_directory
+from flask import Flask, send_from_directory, render_template, request
 
 app = Flask(__name__, static_url_path='')
 
 
 @app.route('/')
 def root():
-    return send_from_directory('', 'index.html')
+    files = sorted(os.listdir(os.path.join(work_dir, 'audio')))
+    return render_template('index.html', files=files)
+
+@app.route('/annotate.html')
+def annotate():
+    name = request.args.get('audio', '')
+    return render_template('annotate.html', name=name)
 
 
 @app.route('/static/<path:path>')

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Audio Diarization Annotation tool</title>
+
+    <link href="data:image/gif;" rel="icon" type="image/x-icon"/>
+
+    <!-- Bootstrap -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="../static/css/style.css"/>
+    <link rel="stylesheet" href="../static/css/ribbon.css"/>
+    <link rel="stylesheet" href="../static/app.css"/>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebApplication">
+<div class="container">
+    <div class="header">
+        <ul class="nav nav-pills pull-right">
+        </ul>
+        <h1 itemprop="name">Audio Diarization Annotation tool</h1>
+        <p><b>Files</b></p>
+    </div>
+
+    <div>
+        <ul>
+            {% for file in files %}
+            <li><a href="annotate.html?audio={{ file }}">{{ file }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="footer row">
+    </div>
+</div>
+</div>
+
+</body>
+</html>

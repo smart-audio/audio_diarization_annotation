@@ -9,23 +9,22 @@
     <!-- Bootstrap -->
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="static/css/style.css"/>
-    <link rel="stylesheet" href="static/css/ribbon.css"/>
-    <link rel="stylesheet" href="static/app.css"/>
-    <!--        <link rel="screenshot" itemprop="screenshot" href="https://katspaugh.github.io/wavesurfer.js/example/screenshot.png" />-->
+    <link rel="stylesheet" href="../static/css/style.css"/>
+    <link rel="stylesheet" href="../static/css/ribbon.css"/>
+    <link rel="stylesheet" href="../static/app.css"/>
 
     <!-- wavesurfer.js -->
-    <script src="static/lib/wavesurfer.js"></script>
+    <script src="../static/lib/wavesurfer.js"></script>
 
     <!-- plugins -->
-    <script src="static/lib/plugin/wavesurfer.timeline.js"></script>
-    <script src="static/lib/plugin/wavesurfer.regions.js"></script>
-    <script src="static/lib/plugin/wavesurfer.minimap.js"></script>
-    <script src="static/lib/plugin/wavesurfer.cursor.js"></script>
+    <script src="../static/lib/plugin/wavesurfer.timeline.js"></script>
+    <script src="../static/lib/plugin/wavesurfer.regions.js"></script>
+    <script src="../static/lib/plugin/wavesurfer.minimap.js"></script>
+    <script src="../static/lib/plugin/wavesurfer.cursor.js"></script>
 
     <!-- App -->
-    <script src="static/trivia.js"></script>
-    <script src="static/app.js"></script>
+    <script src="../static/trivia.js"></script>
+    <script src="../static/app.js"></script>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebApplication">
@@ -40,6 +39,7 @@
             </ul>
         </noindex>
         <h1 itemprop="name">Audio Diarization Annotation tool</h1>
+        <div><p><b>Annotating File: {{ name }}</b></p></div>
     </div>
 
     <div id="demo">
@@ -100,15 +100,15 @@
                 <option value="other">other</option>
             </select>
         </div>
-<!--        <div class="form-group">-->
-<!--            <label for="note">Note</label>-->
-<!--            <textarea id="note" class="form-control" rows="3" name="note"></textarea>-->
-<!--        </div>-->
+        <!--        <div class="form-group">-->
+        <!--            <label for="note">Note</label>-->
+        <!--            <textarea id="note" class="form-control" rows="3" name="note"></textarea>-->
+        <!--        </div>-->
 
         <div>
             <button type="submit" class="btn btn-success btn-block">Save</button>
         </div>
-<!--        <center><i>or</i></center>-->
+        <!--        <center><i>or</i></center>-->
         <div>
             <button type="button" class="btn btn-danger btn-block" data-action="delete-region">Delete</button>
         </div>
