@@ -1,5 +1,6 @@
 # Audio Diarization Annotation
 Audio Diarization Annotation tool based on library wavesurfer.js.
+Serves by Flask.
 
 ![](./art/Peek%202019-09-19%2022-05.gif)
 
@@ -15,4 +16,5 @@ Audio Diarization Annotation tool based on library wavesurfer.js.
 ```
 
 ## Requirements
+- Python 3
 - Flask
