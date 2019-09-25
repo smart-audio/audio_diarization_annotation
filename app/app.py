@@ -41,6 +41,7 @@ def annotation(path):
             json.dump(data, f, indent=2)
         return 'ok'
 
+
 @app.route('/audio/<path:path>')
 def audio(path):
     return send_from_directory(os.path.join(work_dir, 'audio'), path)

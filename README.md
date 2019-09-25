@@ -13,3 +13,6 @@ Audio Diarization Annotation tool based on library wavesurfer.js.
 │   └── audio
 │       └── demo1.mp3
 ```
+
+## Requirements
+- Flask
