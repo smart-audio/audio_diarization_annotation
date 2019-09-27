@@ -10,7 +10,12 @@ app = Flask(__name__, static_url_path='')
 
 @app.route('/')
 def root():
-    files = sorted(os.listdir(os.path.join(work_dir, 'audio')))
+    audio_files = sorted(os.listdir(os.path.join(work_dir, 'audio')))
+    files = []
+    for a in audio_files:
+        file = {'audio': a,
+                'annotation': os.path.splitext(a)[0] + '.json'}
+        files.append(file)
     return render_template('index.html', files=files)
 
 
@@ -52,4 +57,4 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         work_dir = sys.argv[1]
         work_dir = os.path.realpath(work_dir)
-    app.run(debug=True)
+    app.run(host='0.0.0.0')

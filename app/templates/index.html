@@ -27,7 +27,9 @@
     <div>
         <ul>
             {% for file in files %}
-            <li><a href="annotate.html?audio={{ file }}">{{ file }}</a></li>
+            <li><a href="annotate.html?audio={{ file.audio }}">{{ file.audio }}</a>
+                [<a href="audio/{{ file.audio }}">下载音频</a>
+                <a href="annotation/{{ file.annotation }}">下载标注</a>]</li>
             {% endfor %}
         </ul>
     </div>
