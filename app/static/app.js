@@ -313,7 +313,7 @@ function randomColor(alpha) {
 }
 
 function selectColor(who) {
-    let whos = ['teacher', 'student', 'other'];
+    let whos = ['teacher', 'student', 'other', 'silence'];
     let idx = -1;
     for (let i in whos) {
         if (who == whos[i]) {
@@ -324,8 +324,8 @@ function selectColor(who) {
         idx = whos.length;
     }
 
-    alpha = 0.5
-    colors = [[229, 43, 80, alpha], [255, 191, 0, alpha], [153, 102, 204, alpha], [0, 127, 255, alpha]];
+    alpha = 0.5;
+    colors = [[229, 43, 80, alpha], [255, 191, 0, alpha], [153, 102, 204, alpha], [0, 127, 255, alpha], [150, 150, 150, alpha]];
 
     return (
         'rgba(' +
