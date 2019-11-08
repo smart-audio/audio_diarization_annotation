@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function () {
     wavesurfer.on('region-click', function (region, e) {
         if (e.shiftKey) {
             e.stopPropagation();
-            wavesurfer.skip(region.start - wavesurfer.getCurrentTime());
+            wavesurfer.skip(region.start - wavesurferGetCurrentTimeRound());
             region.play();
         }
     });
@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (e.shiftKey) {
                     // get the nearest prior region
                     let sortedRegions = sortRegions(wavesurfer.regions.list);
-                    let end = wavesurfer.getCurrentTime();
+                    let end = wavesurferGetCurrentTimeRound();
                     let priorRegion = null;
                     let start;
                     let r;
@@ -188,7 +188,7 @@ function saveAnnotationToServer() {
             return {
                 start: region.start,
                 end: region.end,
-                attributes: region.attributes,
+                // attributes: region.attributes,
                 data: region.data
             };
         })
@@ -418,4 +418,8 @@ function getUrlVars() {
         vars[key] = value;
     });
     return vars;
+}
+
+function wavesurferGetCurrentTimeRound() {
+    return wavesurfer.getCurrentTime().toFixed(2);
 }
