@@ -38,21 +38,24 @@ document.addEventListener('DOMContentLoaded', function () {
                     'font-size': '10px'
                 }
             })
-
         ]
     };
 
-    if (location.search.match('scroll')) {
-        options.minPxPerSec = 100;
-        options.scrollParent = true;
-    }
-
-    if (location.search.match('fill')) {
-        options.normalize = true;
-    }
-
     wavesurfer = WaveSurfer.create(options);
     wavesurfer.load('/audio/' + audio_name);
+
+    // load peak of backend generated
+    // wavesurfer.util
+    //     .fetchFile({
+    //         responseType: 'json',
+    //         url: 'rashomon.json'
+    //     })
+    //     .on('success', function (data) {
+    //         wavesurfer.load(
+    //             '../media/msw001_03_rashomon_akutagawa_mt_64kb.mp3',
+    //             data
+    //         );
+    //     });
 
     /* Regions */
     wavesurfer.on('ready', function () {

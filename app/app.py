@@ -7,6 +7,7 @@ from flask import Flask, send_from_directory, render_template, request
 
 app = Flask(__name__, static_url_path='')
 
+work_dir = os.path.realpath('../demo_dir')
 
 @app.route('/')
 def root():
@@ -53,7 +54,6 @@ def audio(path):
 
 
 if __name__ == "__main__":
-    work_dir = os.path.realpath('../demo_dir')
     if len(sys.argv) > 1:
         work_dir = sys.argv[1]
         work_dir = os.path.realpath(work_dir)
